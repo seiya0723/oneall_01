@@ -1,0 +1,57 @@
+{% load static %}
+
+
+
+{% for chat in chat_group.chats %}
+
+<div class="{% if chat.user.id == request.user.id %}my{% else %}others{% endif %}_speech_bubble_area speech_bubble_area">
+    {# 相手の投稿であれば、アイコンは左に表示 #}
+    {% if chat.user.id != request.user.id %}
+    <div class="icon_area">
+        {% if request.user.icon %}
+        <img src="{{ request.user.icon.url }}" alt="">
+        {% else %}
+        <img src="" alt="">
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="chat_area">
+        <div class="chat_speeker">{{ chat.user.handle_name }}</div>
+        <div class="speech_bubble">
+            <div>{{ chat.message|linebreaksbr|urlize }}</div>
+        </div>
+        <div class="chat_date">{{ chat.dt|date:'Y/m/d H:i' }}</div>
+    </div>
+
+    {# 自分の投稿であれば、アイコンは右に表示 #}
+    {% if chat.user.id == request.user.id %}
+    <div class="icon_area">
+        {% if request.user.icon %}
+        <img src="{{ request.user.icon.url }}" alt="">
+        {% else %}
+        <img src="" alt="">
+        {% endif %}
+    </div>
+    {% endif %}
+
+
+</div>
+
+
+
+
+{% comment %}
+<div class="border">
+    <div>{{ chat.user.handle_name }}</div>
+    <div>{{ chat.dt| }}</div>
+    <div>{{ chat.message|linebreaksbr|urlize }}</div>
+</div>
+{% endcomment %}
+{% endfor %}
+
+<form id="chat_form_area" action="{% url 'chat:chat_message' chat_group.id %}" method="POST">
+    {% csrf_token %}
+    <textarea name="message" class="form-control"></textarea>
+    <input id="message_submit" type="button" value="送信" class="btn btn-outline-primary">
+</form>

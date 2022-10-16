@@ -1,0 +1,42 @@
+{% extends "oneall/base.html" %}
+{% load static %}
+{% load custom_tag %}
+{% load count_good %}
+
+
+{% block extra_head %}
+<title>MYPAGE －ONE/ALL</title>
+{% endblock %}
+
+
+{% block main %}
+<h1>MYPAGE</h1>
+<section>
+    <h3>ユーザー情報</h3>
+
+    <div>{{ request.user.handle_name }}</div>
+    <div>
+        {% if request.user.icon %}
+        <img src="{{ request.user.icon.url }}" alt="">
+        {% endif %}
+    </div>
+    <div>{{ request.user.introduction }}</div>
+</section>
+
+
+<section>
+    <h3>ユーザー編集</h3>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input class="form-control" type="text" name="handle_name" value="{{ request.user.handle_name }}">
+        <input type="file" name="icon">
+        <textarea class="form-control" name="introduction">{{ request.user.introduction }}</textarea>
+
+        <input type="submit" value="送信">
+    </form>
+
+</section>
+
+
+
+{% endblock %}
